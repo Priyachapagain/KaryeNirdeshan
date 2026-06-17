@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ne">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>कार्य निर्देशन फाराम — तौलिहवा वितरण केन्द्र</title>
+  <style>
+    :root {
+      color-scheme: light;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      background: #f1f5f9;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+    }
+
+    .kn-module-container {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    .kn-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 12px;
+    }
+
+    .kn-step {
+      flex: 1;
+      min-width: 120px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .kn-step.on {
+      background: #1e40af;
+      color: #ffffff;
+      border-color: #1e40af;
+      box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.2);
+    }
+
+    .kn-card {
+      display: none;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .kn-card.on {
+      display: block;
+    }
+
+    .sk-ch {
+      background: #f1f5f9;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .sk-ch-t {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .sk-cb {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .kn-fuse-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .kn-fuse-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .kn-fuse-btn.on {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .kn-fuse-btn .fn {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .kn-fuse-btn .fs {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .kn-hint {
+      font-size: 12.5px;
+      color: #2563eb;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 8px 12px;
+    }
+
+    .kn-ctype-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .kn-ctype-btn {
+      padding: 12px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .kn-ctype-btn.on {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
+
+    .kn-mp {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 4px;
+    }
+
+    .kn-mp-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .kn-mp-label small {
+      font-weight: 400;
+      color: #94a3b8;
+    }
+
+    .kn-mp-paste {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 9px 11px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    .kn-mp-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .kn-mp-status {
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .kn-addr-section {
+      margin-top: 14px;
+    }
+
+    .kn-addr-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .kn-addr-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .kn-addr-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 560px) {
+      .kn-addr-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kn-addr-preview {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 7px;
+      font-size: 13px;
+      color: #475569;
+      min-height: 36px;
+    }
+
+    .sk-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .sk-f {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .sk-f label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .sk-f input,
+    .sk-f select,
+    .sk-f textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+      color: #1e293b;
+      transition: border 0.2s;
+    }
+
+    .sk-f input:focus,
+    .sk-f select:focus,
+    .sk-f textarea:focus {
+      border-color: #2563eb;
+      outline: none;
+    }
+
+    .kn-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 16px;
+    }
+
+    .kn-nav:has(.kn-next:first-child) {
+      justify-content: flex-end;
+    }
+
+    .sk-btn {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sk-bp {
+      background: #2563eb;
+      color: white;
+    }
+
+    .sk-bp:hover {
+      background: #1d4ed8;
+    }
+
+    .sk-bg {
+      background: #f1f5f9;
+      color: #475569;
+      border-color: #cbd5e1;
+    }
+
+    .sk-bg:hover {
+      background: #e2e8f0;
+    }
+
+    .sk-bn {
+      background: #059669;
+      color: white;
+    }
+
+    .sk-bn:hover {
+      background: #047857;
+    }
+
+    .kn-doc {
+      background: #ffffff;
+      border: 1px solid #94a3b8;
+      padding: 40px;
+      border-radius: 4px;
+      color: #000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .kn-doc-org {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .kn-doc-center {
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .kn-doc-title-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .kn-doc-title {
+      font-size: 18px;
+      font-weight: 700;
+      border-bottom: 2px solid #000;
+      padding-bottom: 4px;
+    }
+
+    .kn-doc-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .kn-doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+
+    .kn-doc-table td {
+      padding: 10px 8px;
+      border-bottom: 1px dotted #cbd5e1;
+      font-size: 14px;
+      vertical-align: top;
+    }
+
+    .kn-doc-table td:first-child {
+      width: 35%;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .kn-pv-para-box {
+      padding: 16px 20px;
+      border-left: 4px solid #2563eb;
+      background: #f8fafc;
+      margin: 24px 0;
+      line-height: 1.8;
+      font-size: 15px;
+      text-align: justify;
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* ─── Single-page print (same look as पूर्वावलोकन, fit to one A4) ─────── */
+    @media print {
+      @page {
+        size: A4;
+        margin: 8mm 12mm;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        height: auto;
+      }
+
+      #kn-print-wrap {
+        width: 100%;
+      }
+
+      .kn-doc {
+        border: 1.5px solid #0a0a0a;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 8mm 8mm;
+        margin: 0;
+        font-family: 'Noto Sans Devanagari', sans-serif;
+        max-width: 100%;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .kn-doc * {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .kn-doc-org {
+        font-size: 17px;
+        margin-bottom: 0;
+      }
+
+      .kn-doc-center {
+        font-size: 13px;
+        margin-top: 2px;
+      }
+
+      .kn-doc-title-wrap {
+        margin: 8px 0;
+      }
+
+      .kn-doc-title {
+        font-size: 14px;
+        padding-bottom: 2px;
+      }
+
+      .kn-doc-meta {
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+
+      .kn-doc-table {
+        margin-bottom: 8px;
+      }
+
+      .kn-doc-table td {
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+
+      .kn-pv-para-box {
+        margin: 8px 0;
+        padding: 8px 12px;
+        font-size: 12px;
+        line-height: 1.55;
+        border: 1px solid #94a3b8;
+        border-left: 4px solid #2563eb;
+        background: #f8fafc !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color-adjust: exact;
+        border-radius: 0 6px 6px 0;
+      }
+
+      /* signature block — keep on the same page, compact */
+      .kn-doc > div[style*="grid-template-columns:1fr 1fr"] {
+        margin-top: 24px !important;
+        gap: 40px !important;
+        font-size: 12px !important;
+      }
+
+      .kn-doc > div[style*="grid-template-columns:1fr 1fr"] div[style*="margin-top:32px"] {
+        margin-top: 22px !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="kn-root"></div>
+
+  <script>
+    (function (global) {
+      'use strict';
+
+      // ─── Geography data ───────────────────────────────────────────────────────
+      const MUNI_DATA = {
+        'KA.BA.NA.PA': {
+          1: ['AANANDABAG', 'BAHADURGANGCHOK', 'BAIRIYA', 'GAUDICHOK', 'GAYATOL', 'HADBAJAR', 'KALIKATOL', 'MALTOL', 'MASJIT TOL', 'NAYATOL', 'SHIVMANDIRTOL', 'SIBMANDIRTOL'],
+          2: ['BARGADAWA', 'LAMTIYA', 'SAGARTOL', 'SAURAHA'],
+          3: ['BHIKSHCHHUCHO', 'BIRTA', 'DHANAURATOL', 'SIKOTAWA', 'CHHOTKITAULIHAWA'],
+          4: ['DALPUR', 'MALPARA', 'PIPRAHAWA'],
+          5: ['GOTIHAWA', 'KUDAN', 'SIPPURA'],
+          6: ['BELASAPUR', 'BELASPUR', 'GOBARI', 'TILAURI'],
+          7: ['DHAMAULI', 'DHARAMPANIYA'],
+          8: ['DOHANI'],
+          10: ['PIPARA', 'KATUWA', 'NAGAWA'],
+          11: ['JAHADI'],
+          12: ['BITHUWA', 'PIPRAHAWA', 'SAURAHA', 'SEMRAUTI'],
+        },
+        'BA.NA.PA': {
+          1: ['BAIRIYA'], 2: ['LAKHANPARA', 'PIPARA', 'RAJPUR'], 3: ['BHAKTAULI', 'THATI'],
+          4: ['DARKHASTA', 'DUNGAHAWA', 'GAJEHADA', 'JITPUR', 'SIDDIPUR'],
+          5: ['AMRAIYA', 'JHANDA', 'KOPAWA'], 6: ['DHANEWAR', 'GONARI', 'THATI'],
+          8: ['BORDGAU', 'CHAPPARGAU', 'MORMI'], 9: ['JINUWA'], 10: ['MECHKURI'],
+          11: ['BHADSADAWA', 'BHJADDIHAWA', 'CHETIYA', 'GHARBUDHIYA'],
+        },
+        'BU.NA.PA': {
+          1: ['MAHENDRAKOT', 'SEMARAJHARA', 'BASANTAPUR', 'CHANGHAT', 'PATHTHARKOT', 'TIKKAR'],
+          2: ['BAKDERIYA', 'BHADDIHAWA', 'GORUSINGE', 'PURENA', 'JAYNAGAR', 'PARWANIPUR'],
+          3: ['GHANCHAURA', 'RAMNAGAR'], 4: ['BUDDI'], 5: ['RAJPUR'], 6: ['MAHUWA'],
+          7: ['MANPUR'], 8: ['HARIHARPUR'], 9: ['BARKULPUR'], 10: ['DHANKAULI'],
+        },
+        'SUDDODHAN': {
+          1: ['DOHANI', 'PATARIYA'], 2: ['ASUHARENA'], 3: ['LABANI', 'ASUHARENA'],
+          4: ['BITHUWA', 'ASUHARENA'], 5: ['JAYANAGARA', 'TADANAGAR'], 6: ['BIMIHA'],
+          8: ['BASKHOR', 'KHORIYA', 'MADHUNAGAR'],
+        },
+        'YASHODHARA': {
+          1: ['VANKATWA', 'PAKADI', 'SIHOKHOR', 'TITIRKHA'], 2: ['BHADEHAR'], 3: ['BASANTAPUR'],
+          4: ['PARSOIYA', 'SEMARI'], 6: ['BHAISAIYA', 'RAMAWAPUR', 'RANGAPUR', 'BHAGAWANPUR'],
+          8: ['BASKHOR', 'KHORIYA', 'MADHUNAGAR'],
+        },
+        'MAYADEVI': {
+          1: ['BAROHIYA', 'BARAHI', 'BARROIYA', 'PAKADI', 'PICHURKHI'], 2: ['MANKHORIYA'],
+          3: ['ABHIRAW', 'ASUHARENA', 'BARGADAWA', 'KHAIRATI'],
+          4: ['BASANTAPUR', 'BULADIHAWA', 'CHAKALCHAUDA', 'PIPARA'], 5: ['SISAWA'],
+          6: ['GAURIGANG', 'SERAHAWA', 'CHAKARCHAUDA'], 7: ['KARMAHAWA', 'LALPUR', 'SERAIYA'],
+          8: ['BARKUL'], 9: ['BITHUWA'],
+        },
+      };
+
+      const FUSE_CENTRES = [
+        { id: 'kf-lv', name: 'लवनी' },
+        { id: 'kf-jp', name: 'जीतपुर' },
+        { id: 'kf-gh', name: 'घन्चौरा' },
+        { id: 'kf-od', name: 'ओदारी' },
+        { id: 'kf-br', name: 'बरोहिया' },
+      ];
+
+      const WORK_TYPES = {
+        kshamata: {
+          label: 'मिटर क्षमता वृद्धि',
+          btnId: 'kct-ksh'
+        },
+        burn: {
+          label: 'मिटर जलेको',
+          btnId: 'kct-brn'
+        },
+        display: {
+          label: 'डिस्प्ले आउट',
+          btnId: 'kct-dis'
+        },
+        banda: {
+          label: 'मिटर बन्द',
+          btnId: 'kct-bnd'
+        },
+        thaupari: {
+          label: 'मिटर ठाउँसारी',
+          btnId: 'kct-tha'
+        },
+        other: {
+          label: 'अन्य',
+          btnId: 'kct-oth'
+        }
+      };
+
+
+
+      // Module-level state — populated by init()
+      const KN = { fuse: 'लवनी', type: 'kshamata' };
+
+      // ─── Template ─────────────────────────────────────────────────────────────
+      function template() {
+        const fuseBtns = FUSE_CENTRES.map((fc, i) =>
+          `<button type="button" class="kn-fuse-btn${i === 0 ? ' on' : ''}" data-fuse="${fc.name}">
+         <span class="fn">${fc.name}</span><span class="fs">Fuse Sewa</span>
+       </button>`
+        ).join('');
+
+        return `
+    <div class="kn-module-container">
+      <div class="kn-steps">
+        <button type="button" class="kn-step on" data-step="1">१. फ्युज केन्द्र</button>
+        <button type="button" class="kn-step" data-step="2">२. ग्राहक विवरण</button>
+        <button type="button" class="kn-step" data-step="3">३. गुनासो</button>
+        <button type="button" class="kn-step" data-step="4">४. कार्य विवरण</button>
+        <button type="button" class="kn-step" data-step="5">५. पूर्वावलोकन</button>
+      </div>
+
+      <div class="kn-card on" data-card="1">
+        <div class="sk-ch"><span class="sk-ch-t">फ्युज सेवा केन्द्र छान्नुहोस्</span></div>
+        <div class="sk-cb">
+          <div class="kn-fuse-grid">${fuseBtns}</div>
+          <div class="kn-hint">छानिएको फ्युज सेवा केन्द्र नै <strong>खटिने कर्मचारी</strong> मानिन्छ — कार्य विवरणमा स्वतः भरिन्छ ।</div>
+          <div class="kn-nav"><button type="button" class="sk-btn sk-bp kn-next" data-to="2">अगाडि →</button></div>
+        </div>
+      </div>
+
+      <div class="kn-card" data-card="2">
+        <div class="sk-ch"><span class="sk-ch-t">ग्राहकको विवरण</span></div>
+        <div class="sk-cb">
+          <div class="kn-mp">
+            <label class="kn-mp-label">mPower डेटा पेस्ट <small>(ग्राहक विवरण भाग — स्वतः भरिन्छ)</small></label>
+            <textarea id="kn-mp-paste" class="kn-mp-paste" rows="4"
+              placeholder="Consumer Meter Reading Report (वा ग्राहक विवरण भाग) यहाँ पेस्ट गर्नुहोस्..."></textarea>
+            <div class="kn-mp-actions">
+              <button type="button" class="sk-btn sk-bp" id="kn-mp-parse">स्वत: भर्नुहोस्</button>
+              <button type="button" class="sk-btn sk-bg" id="kn-mp-clear">खाली गर्नुहोस्</button>
+              <span id="kn-mp-status" class="kn-mp-status"></span>
+            </div>
+          </div>
+          <div class="sk-form-grid">
+            <div class="sk-f"><label>ग्राहकको नाम</label><input id="kn-naam" type="text" placeholder="पूरा नाम"></div>
+            <div class="sk-f"><label>ग्राहक आईडी</label><input id="kn-id" type="text" placeholder="000000012345"></div>
+            <div class="sk-f"><label>मोबाइल नं.</label><input id="kn-mob" type="tel" placeholder="98XXXXXXXX"></div>
+            <div class="sk-f"><label>मिति (आवेदन)</label><input id="kn-miti" type="text" placeholder="YYYY-MM-DD"></div>
+          </div>
+          <div class="kn-addr-section">
+            <div class="kn-addr-label">ठेगाना</div>
+            <div class="kn-addr-box" id="kn-addr-box">
+              <div class="kn-addr-grid">
+                <div class="sk-f"><label>नगरपालिका<select id="kn-addr-muni"><option value="">— छान्नुहोस् —</option></select></label></div>
+                <div class="sk-f"><label>वडा नं.<select id="kn-addr-ward" disabled><option value="">— पहिले नगरपालिका —</option></select></label></div>
+              </div>
+              <div class="sk-f" style="margin-top:10px"><label>टोल / ठाउँ<select id="kn-addr-place" disabled><option value="">— पहिले वडा —</option></select></label></div>
+              <div id="kn-addr-custom-wrap" style="display:none;margin-top:8px">
+                <div class="sk-f"><label>नयाँ टोल / ठाउँ<input type="text" id="kn-addr-custom" placeholder="टोल / ठाउँको नाम..."></label></div>
+              </div>
+              <div class="kn-addr-preview" id="kn-addr-preview">ठेगाना छान्नुहोस्...</div>
+              <div style="margin-top:6px;display:flex;gap:8px">
+                <button type="button" class="sk-btn sk-bg" id="kn-addr-toggle-custom" style="font-size:12px;padding:3px 10px">+ नयाँ टोल थप्नुहोस्</button>
+                <button type="button" class="sk-btn sk-bg" id="kn-addr-cancel-custom" style="font-size:12px;padding:3px 10px;display:none">रद्द</button>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="kn-addr">
+          <div class="kn-nav">
+            <button type="button" class="sk-btn sk-bg kn-back" data-to="1">← पछाडि</button>
+            <button type="button" class="sk-btn sk-bp kn-next" data-to="3">अगाडि →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kn-card" data-card="3">
+        <div class="sk-ch"><span class="sk-ch-t">गुनासोको विवरण</span></div>
+        <div class="sk-cb">
+          <div class="kn-ctype-grid">
+            <button type="button" class="kn-ctype-btn on" id="kct-ksh" data-type="kshamata">मिटर क्षमता वृद्धि</button>
+            <button type="button" class="kn-ctype-btn" id="kct-brn" data-type="burn">मिटर जलेको</button>
+            <button type="button" class="kn-ctype-btn" id="kct-dis" data-type="display">डिस्प्ले आउट</button>
+            <button type="button" class="kn-ctype-btn" id="kct-bnd" data-type="banda">मिटर बन्द</button>
+            <button type="button" class="kn-ctype-btn" id="kct-tha"  data-type="thaupari">मिटर ठाउँसारी</button>
+            <button type="button" class="kn-ctype-btn" id="kct-oth"  data-type="other">अन्य</button>
+          </div>
+
+          <div id="kn-cap-fields">
+            <div class="sk-form-grid">
+              <div class="sk-f"><label>हालको क्षमता</label><input id="kn-cap1" type="text" placeholder="5A / 5 KW"></div>
+              <div class="sk-f"><label>नयाँ क्षमता</label><input id="kn-cap2" type="text" placeholder="15A / 10 KW"></div>
+            </div>
+          </div>
+
+          <div id="kn-other-fields" style="display:none">
+            <div class="sk-f">
+              <label>गुनासोको विवरण</label>
+              <textarea id="kn-other-txt" rows="3" placeholder="गुनासोको विस्तृत विवरण..."></textarea>
+            </div>
+          </div>
+          <div class="kn-nav">
+            <button type="button" class="sk-btn sk-bg kn-back" data-to="2">← पछाडि</button>
+            <button type="button" class="sk-btn sk-bp kn-next" data-to="4">अगाडि →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kn-card" data-card="4">
+        <div class="sk-ch"><span class="sk-ch-t">कार्य सम्पन्न विवरण</span></div>
+        <div class="sk-cb">
+          <div class="sk-form-grid">
+            <div class="sk-f"><label>कम्प्लेन मिति / समय</label><input id="kn-comp-miti" type="text" placeholder="YYYY-MM-DD, बिहान ९ बजे"></div>
+            <div class="sk-f"><label>खटाउने व्यक्ति</label><input id="kn-khataune" type="text" placeholder="नाम, दर्जा"></div>
+            <div class="sk-f"><label>खटिने कर्मचारी <small style="font-weight:400;color:#94a3b8">(फ्युज सेवा केन्द्र)</small></label><input id="kn-khatine" type="text" placeholder="फ्युज केन्द्र छान्दा स्वतः भरिन्छ"></div>
+            <div class="sk-f"><label>कार्य सम्पन्न मिति / समय</label><input id="kn-done-miti" type="text" placeholder="YYYY-MM-DD, दिउँसो २ बजे"></div>
+            <div class="sk-f">
+              <label>सेवा शुल्क</label>
+              <select id="kn-shulka">
+                <option value="संकलन गरेको">संकलन गरेको</option>
+                <option value="संकलन नगरेको">संकलन नगरेको</option>
+                <option value="मिनाहा गरेको">मिनाहा गरेको</option>
+              </select>
+            </div>
+            <div class="sk-f"><label>रसिद नं.</label><input id="kn-rasid" type="text" placeholder="रसिद नम्बर"></div>
+          </div>
+          <div class="kn-nav">
+            <button type="button" class="sk-btn sk-bg kn-back" data-to="3">← पछाडि</button>
+            <button type="button" class="sk-btn sk-bp kn-next" data-to="5">पूर्वावलोकन →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kn-card" data-card="5">
+        <div class="sk-ch"><span class="sk-ch-t">पूर्वावलोकन</span></div>
+        <div class="sk-cb">
+          <div class="kn-doc" id="kn-printable">
+            <div class="kn-doc-org">नेपाल विद्युत प्राधिकरण</div>
+            <div class="kn-doc-center">तौलिहवा वितरण केन्द्र</div>
+            <div class="kn-doc-title-wrap"><div class="kn-doc-title">कार्य निर्देशन फाराम</div></div>
+
+            <div class="kn-doc-meta">
+              <div>श्री <strong id="kn-pv-fuse">—</strong> फ्युज सेवा केन्द्र ।</div>
+              <div>मितिः <strong id="kn-pv-miti">—</strong></div>
+            </div>
+
+            <table class="kn-doc-table">
+              <tr><td>ग्राहकको नाम</td><td id="kn-pv-naam">—</td></tr>
+              <tr><td>ग्राहक आईडी</td><td id="kn-pv-id">—</td></tr>
+              <tr><td>ठेगाना</td><td id="kn-pv-addr">—</td></tr>
+              <tr><td>मोबाइल नं.</td><td id="kn-pv-mob">—</td></tr>
+              <tr><td>गुनासोको विषय</td><td id="kn-pv-subject">—</td></tr>
+            </table>
+
+            <div id="kn-pv-para" class="kn-pv-para-box">—</div>
+
+            <table class="kn-doc-table">
+              <tr><td>कम्प्लेन मिति / समय</td><td id="kn-pv-comp">—</td></tr>
+              <tr><td>खटाउने व्यक्ति</td><td id="kn-pv-khataune">—</td></tr>
+              <tr><td>खटिने कर्मचारी</td><td id="kn-pv-khatine">—</td></tr>
+              <tr><td>कार्य सम्पन्न मिति</td><td id="kn-pv-done">—</td></tr>
+              <tr><td>सेवा शुल्क</td><td id="kn-pv-shulka">—</td></tr>
+              <tr><td>रसिद नं.</td><td id="kn-pv-rasid">—</td></tr>
+            </table>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px;text-align:center;font-size:14px">
+              <div><div style="border-top:1.5px solid #0a0a0a;padding-top:10px;margin-top:32px;font-weight:700">खटाउने व्यक्तिको</div><div style="font-size:12px;color:#64748b;margin-top:4px">दस्तखत / मिति</div></div>
+              <div><div style="border-top:1.5px solid #0a0a0a;padding-top:10px;margin-top:32px;font-weight:700">खटिने कर्मचारीको</div><div style="font-size:12px;color:#64748b;margin-top:4px">दस्तखत / मिति</div></div>
+            </div>
+          </div>
+          <div class="kn-nav">
+            <button type="button" class="sk-btn sk-bg kn-back" data-to="4">← सच्याउनुहोस्</button>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="sk-btn sk-bn" id="kn-print-btn">प्रिन्ट</button>
+              <button type="button" class="sk-btn sk-bp" id="kn-reset-btn">नयाँ फाराम</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+      }
+
+      // ─── Init ─────────────────────────────────────────────────────────────────
+      function init() {
+        document.querySelectorAll('.kn-step').forEach(btn => {
+          btn.addEventListener('click', () => knStep(+btn.dataset.step));
+        });
+        document.querySelectorAll('.kn-next').forEach(btn => {
+          btn.addEventListener('click', () => knStep(+btn.dataset.to));
+        });
+        document.querySelectorAll('.kn-back').forEach(btn => {
+          btn.addEventListener('click', () => knStep(+btn.dataset.to));
+        });
+
+        // Fuse centre → also fills खटिने कर्मचारी (fuse sewa = dispatched staff)
+        document.querySelectorAll('.kn-fuse-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.kn-fuse-btn').forEach(b => b.classList.remove('on'));
+            btn.classList.add('on');
+            KN.fuse = btn.dataset.fuse;
+            knSyncKhatine();
+            knPreview();
+          });
+        });
+
+        document.querySelectorAll('.kn-ctype-btn').forEach(btn => {
+          btn.addEventListener('click', () => knType(btn.dataset.type));
+        });
+
+        const liveIds = ['kn-naam', 'kn-id', 'kn-mob', 'kn-miti', 'kn-cap1', 'kn-cap2', 'kn-other-txt', 'kn-comp-miti', 'kn-khataune', 'kn-khatine', 'kn-done-miti', 'kn-rasid', 'kn-shulka'];
+        liveIds.forEach(id => {
+          document.getElementById(id)?.addEventListener('input', knPreview);
+          document.getElementById(id)?.addEventListener('change', knPreview);
+        });
+
+        // If the user manually edits खटिने, stop auto-syncing it
+        document.getElementById('kn-khatine')?.addEventListener('input', () => { KN.khatineManual = true; });
+
+        document.getElementById('kn-print-btn')?.addEventListener('click', knPrint);
+        document.getElementById('kn-reset-btn')?.addEventListener('click', knReset);
+
+        document.getElementById('kn-mp-parse')?.addEventListener('click', knParseMpower);
+        document.getElementById('kn-mp-clear')?.addEventListener('click', () => {
+          const ta = document.getElementById('kn-mp-paste'); if (ta) ta.value = '';
+          knMpStatus('');
+        });
+
+        knWireAddress();
+
+        knType('kshamata');
+        knSyncKhatine();   // pre-fill खटिने with default fuse centre
+        knStep(1);
+      }
+
+      // ─── Fuse → खटिने कर्मचारी sync ────────────────────────────────────────────
+      // The selected fuse-sewa centre IS the "खटिने कर्मचारी". Auto-fill it unless
+      // the foreman has manually typed a custom value.
+      function knSyncKhatine() {
+        const el = document.getElementById('kn-khatine');
+        if (!el) return;
+        if (!KN.khatineManual) {
+          el.value = KN.fuse + ' फ्युज सेवा ';
+        }
+      }
+
+      // ─── Step navigation ──────────────────────────────────────────────────────
+      function knStep(n) {
+        document.querySelectorAll('.kn-step').forEach((s, i) => s.classList.toggle('on', i + 1 === n));
+        document.querySelectorAll('.kn-card').forEach((c, i) => c.classList.toggle('on', i + 1 === n));
+        if (n === 5) knPreview();
+        window.scrollTo(0, 0);
+      }
+
+      // ─── Work type ────────────────────────────────────────────────────────────
+      function knType(type) {
+        KN.type = type;
+        document.querySelectorAll('.kn-ctype-btn').forEach(b => b.classList.remove('on'));
+        const info = WORK_TYPES[type];
+        if (info) document.getElementById(info.btnId)?.classList.add('on');
+        const capFields = document.getElementById('kn-cap-fields');
+        const otherFields = document.getElementById('kn-other-fields');
+        if (capFields) capFields.style.display = type === 'kshamata' ? 'block' : 'none';
+        if (otherFields) otherFields.style.display = type === 'other' ? 'block' : 'none';
+        knPreview();
+      }
+
+      // ─── Paragraph builder ───────────────────────────────────────────────────
+      function buildPara(type, naam, ...args) {
+        const [cap1, cap2, other] = args;
+
+        switch (type) {
+
+          case 'kshamata':
+            return `निज ग्राहक श्री ${naam} ले मिटर क्षमता वृद्धि गरी पाउँ भनी यस कार्यालयमा निवेदन पेश गरेको र आवश्यक प्रक्रिया पूरा भएको हुनाले उक्त मिटरको क्षमता ${cap1 || '...'} बाट ${cap2 || '...'} मा वृद्धि गरिदिनु हुन अनुरोध छ ।`;
+
+          case 'burn':
+            return `निज ग्राहक श्री ${naam} ले मिटर जलेको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
+
+          case 'display':
+            return `निज ग्राहक श्री ${naam} ले मिटरको डिस्प्ले आउट भएको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
+
+          case 'banda':
+            return `निज ग्राहक श्री ${naam} ले मिटर बन्द भएको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
+
+          case 'thaupari':
+            return `निज ग्राहक श्री ${naam} को मिटर ठाउँसारी सम्बन्धी सम्पूर्ण प्रक्रिया पूरा भएको हुनाले उक्त मिटर ठाउँसारी गरिदिनु हुन अनुरोध छ ।`;
+
+          default:
+            return other || `निज ग्राहक श्री ${naam} सम्बन्धी आवश्यक कार्य गरिदिनु हुन अनुरोध छ ।`;
+        }
+      }
+
+      // ─── Address picker logic ──────────────────────────────────────────────────
+      let knAddrState = { muni: '', ward: '', place: '', custom: '', isCustom: false };
+
+      function knUpdateAddrPreview() {
+        const { muni, ward, place, custom, isCustom } = knAddrState;
+        const parts = [muni, ward ? 'वडा नं. ' + ward : '', isCustom ? custom : place].filter(Boolean);
+        const text = parts.join(', ') || 'ठेगाना छान्नुहोस्...';
+        const prev = document.getElementById('kn-addr-preview');
+        const hidden = document.getElementById('kn-addr');
+        if (prev) prev.textContent = text;
+        if (hidden) hidden.value = parts.length > 0 ? parts.join(', ') : '';
+        knPreview && knPreview();
+      }
+
+      function knWireAddress() {
+        const muniSel = document.getElementById('kn-addr-muni');
+        if (!muniSel) return;
+        Object.keys(MUNI_DATA).forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m; opt.textContent = m;
+          muniSel.appendChild(opt);
+        });
+
+        muniSel.addEventListener('change', () => {
+          const muni = muniSel.value;
+          knAddrState = { muni, ward: '', place: '', custom: '', isCustom: false };
+          const wardSel = document.getElementById('kn-addr-ward');
+          const placeSel = document.getElementById('kn-addr-place');
+          wardSel.innerHTML = '<option value="">— वडा छान्नुहोस् —</option>';
+          placeSel.innerHTML = '<option value="">— पहिले वडा —</option>';
+          placeSel.disabled = true;
+          if (muni && MUNI_DATA[muni]) {
+            wardSel.disabled = false;
+            Object.keys(MUNI_DATA[muni]).sort((a, b) => +a - +b).forEach(w => {
+              const opt = document.createElement('option');
+              opt.value = w; opt.textContent = 'वडा नं. ' + w;
+              wardSel.appendChild(opt);
+            });
+          } else { wardSel.disabled = true; }
+          knHideCustom();
+          knUpdateAddrPreview();
+        });
+
+        document.getElementById('kn-addr-ward')?.addEventListener('change', () => {
+          const muni = document.getElementById('kn-addr-muni').value;
+          const ward = document.getElementById('kn-addr-ward').value;
+          Object.assign(knAddrState, { ward, place: '', custom: '', isCustom: false });
+          const placeSel = document.getElementById('kn-addr-place');
+          placeSel.innerHTML = '<option value="">— टोल —</option>';
+          if (muni && ward && MUNI_DATA[muni] && MUNI_DATA[muni][ward]) {
+            placeSel.disabled = false;
+            MUNI_DATA[muni][ward].forEach(pl => {
+              const opt = document.createElement('option');
+              opt.value = pl; opt.textContent = pl;
+              placeSel.appendChild(opt);
+            });
+            const oth = document.createElement('option'); oth.value = '__other__';
+            oth.textContent = '— अन्य (नयाँ) —'; placeSel.appendChild(oth);
+          } else { placeSel.disabled = true; }
+          knHideCustom();
+          knUpdateAddrPreview();
+        });
+
+        document.getElementById('kn-addr-place')?.addEventListener('change', () => {
+          const val = document.getElementById('kn-addr-place').value;
+          if (val === '__other__') {
+            knAddrState.place = ''; knAddrState.isCustom = true; knShowCustom();
+          } else {
+            knAddrState.place = val; knAddrState.isCustom = false; knHideCustom();
+          }
+          knUpdateAddrPreview();
+        });
+
+        document.getElementById('kn-addr-custom')?.addEventListener('input', e => {
+          knAddrState.custom = e.target.value.trim();
+          knUpdateAddrPreview();
+        });
+
+        document.getElementById('kn-addr-toggle-custom')?.addEventListener('click', () => {
+          knAddrState.isCustom = true; knShowCustom();
+          const p = document.getElementById('kn-addr-place');
+          if (p) p.value = ''; knAddrState.place = '';
+          knUpdateAddrPreview();
+        });
+        document.getElementById('kn-addr-cancel-custom')?.addEventListener('click', () => {
+          knHideCustom(); knUpdateAddrPreview();
+        });
+      }
+
+      function knShowCustom() {
+        const w = document.getElementById('kn-addr-custom-wrap');
+        const t = document.getElementById('kn-addr-toggle-custom');
+        const c = document.getElementById('kn-addr-cancel-custom');
+        if (w) w.style.display = 'block';
+        if (t) t.style.display = 'none';
+        if (c) c.style.display = 'inline-block';
+        document.getElementById('kn-addr-custom')?.focus();
+      }
+
+      function knHideCustom() {
+        const w = document.getElementById('kn-addr-custom-wrap');
+        const t = document.getElementById('kn-addr-toggle-custom');
+        const c = document.getElementById('kn-addr-cancel-custom');
+        const ci = document.getElementById('kn-addr-custom');
+        if (w) w.style.display = 'none';
+        if (t) t.style.display = 'inline-block';
+        if (c) c.style.display = 'none';
+        if (ci) ci.value = '';
+        knAddrState.custom = ''; knAddrState.isCustom = false;
+      }
+
+      function knMpStatus(msg, kind) {
+        const el = document.getElementById('kn-mp-status');
+        if (!el) return;
+        el.textContent = msg || '';
+        el.style.color = kind === 'warn' ? '#d97706'
+          : kind === 'err' ? '#dc2626'
+            : '#16a34a';
+      }
+
+      function knParseMpower() {
+        const raw = document.getElementById('kn-mp-paste')?.value || '';
+        if (!raw.trim()) { knMpStatus('पेस्ट बक्स खाली छ।', 'warn'); return; }
+        const lines = raw.split(/\r?\n|\t/).map(l => l.trim()).filter(l => l);
+        const norm = t => (t || '').toLowerCase().replace(/[.,\s]/g, '');
+        const findAfterLabel = (label, offset = 4) => {
+          const idx = lines.findIndex(l => norm(l) === norm(label));
+          return idx >= 0 ? (lines[idx + offset] || '') : '';
+        };
+        const name = findAfterLabel('Consumer Name').replace(/^(Mr|Mrs|Miss)\.\s*/i, '').trim();
+        const cid = findAfterLabel('Consumer ID').trim();
+        const cno = findAfterLabel('Consumer No').trim();
+        if (!name && !cid && !cno) { knMpStatus('ग्राहक विवरण फेला परेन — पेस्ट जाँच्नुहोस्।', 'err'); return; }
+        const set = (id, v) => { const e = document.getElementById(id); if (e && v) e.value = v; };
+        set('kn-naam', name);
+        set('kn-id', cid);
+        const addrEl = document.getElementById('kn-addr');
+        if (addrEl && !addrEl.value && cno) addrEl.placeholder = 'ग्राहक नं. ' + cno + ' — ठेगाना भर्नुहोस्';
+        knMpStatus('ग्राहक विवरण भरियो ✓', 'ok');
+        knPreview();
+      }
+
+      function knPreview() {
+        const v = id => document.getElementById(id)?.value?.trim() || '';
+        const fill = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '—'; };
+        const naam = v('kn-naam') || '…';
+        fill('kn-pv-fuse', KN.fuse);
+        fill('kn-pv-miti', v('kn-miti'));
+        fill('kn-pv-naam', v('kn-naam'));
+        fill('kn-pv-id', v('kn-id'));
+        fill('kn-pv-addr', v('kn-addr'));
+        fill('kn-pv-mob', v('kn-mob'));
+        fill('kn-pv-subject', WORK_TYPES[KN.type]?.label || '—');
+        fill('kn-pv-para', buildPara(KN.type, naam, v('kn-cap1'), v('kn-cap2'), v('kn-other-txt')));
+        fill('kn-pv-comp', v('kn-comp-miti'));
+        fill('kn-pv-khataune', v('kn-khataune'));
+        fill('kn-pv-khatine', v('kn-khatine') || (KN.fuse + ' फ्युज सेवा '));
+        fill('kn-pv-done', v('kn-done-miti'));
+        fill('kn-pv-shulka', v('kn-shulka') || document.getElementById('kn-shulka')?.options[0]?.value || '—');
+        fill('kn-pv-rasid', v('kn-rasid'));
+      }
+
+      // ─── Print ────────────────────────────────────────────────────────────────
+      function knPrint() {
+        const printable = document.getElementById('kn-printable');
+        if (!printable) { window.print(); return; }
+        const orig = document.body.innerHTML;
+        document.body.innerHTML = `<div id="kn-print-wrap">${printable.outerHTML}</div>`;
+        window.print();
+        document.body.innerHTML = orig;
+        window.location.reload();
+      }
+
+      // ─── Reset ────────────────────────────────────────────────────────────────
+      function knReset() {
+        ['kn-naam', 'kn-id', 'kn-addr', 'kn-mob', 'kn-miti', 'kn-cap1', 'kn-cap2', 'kn-other-txt', 'kn-comp-miti', 'kn-khataune', 'kn-khatine', 'kn-done-miti', 'kn-rasid'].forEach(id => {
+          const e = document.getElementById(id); if (e) e.value = '';
+        });
+        const shulka = document.getElementById('kn-shulka');
+        if (shulka) shulka.selectedIndex = 0;
+        KN.fuse = FUSE_CENTRES[0].name;
+        KN.khatineManual = false;
+        document.querySelectorAll('.kn-fuse-btn').forEach((b, i) => b.classList.toggle('on', i === 0));
+        knType('kshamata');
+        knSyncKhatine();
+        knStep(1);
+      }
+
+      // ─── Boot ───────────────────────────────────────────────────────────────
+      document.getElementById('kn-root').innerHTML = template();
+      init();
+
+    })(window);
+  </script>
+</body>
+
+</html>
