@@ -1013,20 +1013,36 @@
             : '#16a34a';
       }
 
+      // ─── mPower parser ─────────────────────────────────────────────────────────
+      // Handles the Consumer Meter Reading Report layout where the headers
+      // (Consumer Name / Consumer ID / Consumer No / Meter No) sit on one line
+      // and the data values follow on the next line(s), tab- or space-separated.
+      // Anchors on the 12-digit Consumer ID; name = everything before it.
       function knParseMpower() {
         const raw = document.getElementById('kn-mp-paste')?.value || '';
         if (!raw.trim()) { knMpStatus('पेस्ट बक्स खाली छ।', 'warn'); return; }
-        const lines = raw.split(/\r?\n|\t/).map(l => l.trim()).filter(l => l);
-        const norm = t => (t || '').toLowerCase().replace(/[.,\s]/g, '');
-        const findAfterLabel = (label, offset = 4) => {
-          const idx = lines.findIndex(l => norm(l) === norm(label));
-          return idx >= 0 ? (lines[idx + offset] || '') : '';
-        };
-        const name = findAfterLabel('Consumer Name').replace(/^(Mr|Mrs|Miss)\.\s*/i, '').trim();
-        const cid = findAfterLabel('Consumer ID').trim();
-        const cno = findAfterLabel('Consumer No').trim();
-        if (!name && !cid && !cno) { knMpStatus('ग्राहक विवरण फेला परेन — पेस्ट जाँच्नुहोस्।', 'err'); return; }
+
         const set = (id, v) => { const e = document.getElementById(id); if (e && v) e.value = v; };
+
+        // Primary: data row matches "NAME 000000014567 006.19.038 METER"
+        // Name = everything before the 12-digit consumer ID.
+        const row = raw.match(/(.+?)\s+(\d{12})\s+(\d{3}\.\d{2}\.\d{3})\s+(\S+)/);
+        let name = '', cid = '', cno = '';
+
+        if (row) {
+          name = row[1].replace(/^(Mr|Mrs|Miss)\.?\s*/i, '').trim();
+          cid = row[2];
+          cno = row[3];
+        } else {
+          // Fallback: pull standalone tokens anywhere in the blob
+          cid = (raw.match(/\b\d{12}\b/) || [])[0] || '';
+          cno = (raw.match(/\b\d{3}\.\d{2}\.\d{3}\b/) || [])[0] || '';
+          const m = raw.match(/([A-Z][A-Z\s]+?)\s+\d{12}/);
+          if (m) name = m[1].trim();
+        }
+
+        if (!name && !cid && !cno) { knMpStatus('ग्राहक विवरण फेला परेन — पेस्ट जाँच्नुहोस्।', 'err'); return; }
+
         set('kn-naam', name);
         set('kn-id', cid);
         const addrEl = document.getElementById('kn-addr');
