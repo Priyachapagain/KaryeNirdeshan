@@ -600,6 +600,63 @@
         }
       };
 
+      // काम अराउने (खटाउने) कर्मचारी — सधैँ यही व्यक्ति
+      const KHATAUNE_DEFAULT = 'प्रिया चापागाईं';
+
+      // ─── Bikram Sambat (BS) auto-date ─────────────────────────────────────────
+      // Epoch: BS 2083-01-01 = AD 2026-04-14 (Nepali New Year 2083).
+      // Verified anchors: Baisakh 1, 2083 = 14 Apr 2026; Asar 14, 2083 = 28 Jun 2026.
+      // Month-length table chosen so each year boundary lands on the correct
+      // (Apr 13/14) new-year date. Range 2080–2090 BS.
+      const BS_MONTHS = {
+        2080: [31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30],
+        2081: [31, 31, 32, 32, 31, 30, 30, 30, 29, 30, 30, 30],
+        2082: [31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30],
+        2083: [31, 31, 32, 31, 31, 30, 30, 30, 29, 30, 30, 30],
+        2084: [31, 31, 32, 31, 31, 30, 30, 30, 29, 30, 30, 30],
+        2085: [31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30],
+        2086: [31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30],
+        2087: [31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30],
+        2088: [30, 31, 32, 32, 30, 31, 30, 30, 29, 30, 30, 30],
+        2089: [30, 31, 32, 32, 31, 30, 30, 30, 29, 30, 30, 30],
+        2090: [30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30],
+      };
+      const BS_EPOCH_YEAR = 2083;
+      const BS_EPOCH_AD = Date.UTC(2026, 3, 14); // 14 April 2026
+      const ONE_DAY = 86400000;
+
+      // Convert a Gregorian (UTC-midnight) timestamp to a BS {y, m, d} (m is 1-based).
+      function adToBs(adUtcMs) {
+        let diff = Math.round((adUtcMs - BS_EPOCH_AD) / ONE_DAY);
+        let y = BS_EPOCH_YEAR, m = 0, d = 1; // m: 0-based month index
+        if (diff >= 0) {
+          while (diff > 0) {
+            const row = BS_MONTHS[y]; if (!row) break;
+            const dim = row[m];
+            const left = dim - d;
+            if (diff <= left) { d += diff; diff = 0; }
+            else { diff -= (left + 1); m++; d = 1; if (m > 11) { m = 0; y++; } }
+          }
+        } else {
+          while (diff < 0) {
+            m--; if (m < 0) { m = 11; y--; }
+            const row = BS_MONTHS[y]; if (!row) break;
+            const dim = row[m];
+            diff += dim;
+            if (diff >= 0) { d = diff + 1; diff = 0; }
+          }
+        }
+        return { y: y, m: m + 1, d: d };
+      }
+
+      // Today's BS date, using local calendar day.
+      function bsToday() {
+        const now = new Date();
+        return adToBs(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+      }
+
+      const pad2 = n => String(n).padStart(2, '0');
+
 
 
       // Module-level state — populated by init()
@@ -649,7 +706,7 @@
             <div class="sk-f"><label>ग्राहकको नाम</label><input id="kn-naam" type="text" placeholder="पूरा नाम"></div>
             <div class="sk-f"><label>ग्राहक आईडी</label><input id="kn-id" type="text" placeholder="000000012345"></div>
             <div class="sk-f"><label>मोबाइल नं.</label><input id="kn-mob" type="tel" placeholder="98XXXXXXXX"></div>
-            <div class="sk-f"><label>मिति (आवेदन)</label><input id="kn-miti" type="text" placeholder="YYYY-MM-DD"></div>
+            <div class="sk-f"><label>मिति (आवेदन) <small style="font-weight:400;color:#94a3b8">(आजको मिति — स्वतः भरिन्छ)</small></label><input id="kn-miti" type="text" placeholder="YYYY-MM-DD"></div>
           </div>
           <div class="kn-addr-section">
             <div class="kn-addr-label">ठेगाना</div>
@@ -714,7 +771,7 @@
         <div class="sk-cb">
           <div class="sk-form-grid">
             <div class="sk-f"><label>कम्प्लेन मिति / समय</label><input id="kn-comp-miti" type="text" placeholder="YYYY-MM-DD, बिहान ९ बजे"></div>
-            <div class="sk-f"><label>खटाउने व्यक्ति</label><input id="kn-khataune" type="text" placeholder="नाम, दर्जा"></div>
+            <div class="sk-f"><label>खटाउने व्यक्ति <small style="font-weight:400;color:#94a3b8">(स्वतः भरिन्छ)</small></label><input id="kn-khataune" type="text" placeholder="नाम, दर्जा"></div>
             <div class="sk-f"><label>खटिने कर्मचारी <small style="font-weight:400;color:#94a3b8">(फ्युज सेवा केन्द्र)</small></label><input id="kn-khatine" type="text" placeholder="फ्युज केन्द्र छान्दा स्वतः भरिन्छ"></div>
             <div class="sk-f"><label>कार्य सम्पन्न मिति / समय</label><input id="kn-done-miti" type="text" placeholder="YYYY-MM-DD, दिउँसो २ बजे"></div>
             <div class="sk-f">
@@ -725,7 +782,7 @@
                 <option value="मिनाहा गरेको">मिनाहा गरेको</option>
               </select>
             </div>
-            <div class="sk-f"><label>रसिद नं.</label><input id="kn-rasid" type="text" placeholder="रसिद नम्बर"></div>
+            <div class="sk-f"><label>रसिद नं. <small style="font-weight:400;color:#94a3b8">(आजको मितिबाट स्वतः भरिन्छ)</small></label><input id="kn-rasid" type="text" placeholder="183AYYMMDD"></div>
           </div>
           <div class="kn-nav">
             <button type="button" class="sk-btn sk-bg kn-back" data-to="3">← पछाडि</button>
@@ -832,7 +889,32 @@
 
         knType('kshamata');
         knSyncKhatine();   // pre-fill खटिने with default fuse centre
+        knAutoFill();      // pre-fill आजको मिति, रसिद नं., खटाउने व्यक्ति
         knStep(1);
+      }
+
+      // ─── Auto-fill: BS date, receipt no., खटाउने व्यक्ति ───────────────────────
+      // रसिद नं. = "183A" + BS year(2-digit) + BS month(2-digit) + BS day(2-digit).
+      // e.g. 2083-03-14 (असार १४) → 183A830314
+      function knAutoFill() {
+        const t = bsToday();
+        const yy = pad2(t.y % 100);
+        const mm = pad2(t.m);
+        const dd = pad2(t.d);
+
+        const miti = document.getElementById('kn-miti');
+        if (miti && !miti.value) miti.value = t.y + '-' + mm + '-' + dd;
+
+        const comp = document.getElementById('kn-comp-miti');
+        if (comp && !comp.value) comp.value = t.y + '-' + mm + '-' + dd;
+
+        const rasid = document.getElementById('kn-rasid');
+        if (rasid && !rasid.value) rasid.value = '183A' + yy + mm + dd;
+
+        const khataune = document.getElementById('kn-khataune');
+        if (khataune && !khataune.value) khataune.value = KHATAUNE_DEFAULT;
+
+        knPreview();
       }
 
       // ─── Fuse → खटिने कर्मचारी sync ────────────────────────────────────────────
@@ -874,7 +956,7 @@
         switch (type) {
 
           case 'kshamata':
-            return `निज ग्राहक श्री ${naam} ले मिटर क्षमता वृद्धि गरी पाउँ भनी यस कार्यालयमा निवेदन पेश गरेको र आवश्यक प्रक्रिया पूरा भएको हुनाले उक्त मिटरको क्षमता ${cap1 || '...'} बाट ${cap2 || '...'} मा वृद्धि गरिदिनु हुन अनुरोध छ ।`;
+            return `निज ग्राहक श्री ${naam} ले यस कार्यालयमा निवेदन पेश गरेको र आवश्यक प्रक्रिया पूरा भएको हुनाले उक्त मिटरको ${cap1 || '...'} बाट ${cap2 || '...'} को MCB Change गरिदिनु हुन अनुरोध छ ।`;
 
           case 'burn':
             return `निज ग्राहक श्री ${naam} ले मिटर जलेको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
@@ -1064,7 +1146,7 @@
         fill('kn-pv-subject', WORK_TYPES[KN.type]?.label || '—');
         fill('kn-pv-para', buildPara(KN.type, naam, v('kn-cap1'), v('kn-cap2'), v('kn-other-txt')));
         fill('kn-pv-comp', v('kn-comp-miti'));
-        fill('kn-pv-khataune', v('kn-khataune'));
+        fill('kn-pv-khataune', v('kn-khataune') || KHATAUNE_DEFAULT);
         fill('kn-pv-khatine', v('kn-khatine') || (KN.fuse + ' फ्युज सेवा '));
         fill('kn-pv-done', v('kn-done-miti'));
         fill('kn-pv-shulka', v('kn-shulka') || document.getElementById('kn-shulka')?.options[0]?.value || '—');
@@ -1094,6 +1176,7 @@
         document.querySelectorAll('.kn-fuse-btn').forEach((b, i) => b.classList.toggle('on', i === 0));
         knType('kshamata');
         knSyncKhatine();
+        knAutoFill();      // re-apply आजको मिति, रसिद नं., खटाउने व्यक्ति
         knStep(1);
       }
 
