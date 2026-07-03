@@ -339,83 +339,92 @@
       background: #047857;
     }
 
+    /* ─── Paper-style document (matches the printed NEA form exactly) ────── */
     .kn-doc {
       background: #ffffff;
-      border: 1px solid #94a3b8;
-      padding: 40px;
-      border-radius: 4px;
+      padding: 36px 40px;
       color: #000;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .kn-doc-org {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 700;
       text-align: center;
+      line-height: 1.25;
     }
 
     .kn-doc-center {
       font-size: 16px;
       font-weight: 600;
       text-align: center;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .kn-doc-title-wrap {
       display: flex;
       justify-content: center;
-      margin: 20px 0;
+      margin: 10px 0 6px;
     }
 
     .kn-doc-title {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 700;
       border-bottom: 2px solid #000;
-      padding-bottom: 4px;
+      padding-bottom: 2px;
     }
 
-    .kn-doc-meta {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      font-size: 14px;
-    }
-
-    .kn-doc-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 24px;
-    }
-
-    .kn-doc-table td {
-      padding: 10px 8px;
-      border-bottom: 1px dotted #cbd5e1;
-      font-size: 14px;
-      vertical-align: top;
-    }
-
-    .kn-doc-table td:first-child {
-      width: 35%;
-      font-weight: 600;
-      color: #334155;
-    }
-
-    .kn-pv-para-box {
-      padding: 16px 20px;
-      border-left: 4px solid #2563eb;
-      background: #f8fafc;
-      margin: 24px 0;
-      line-height: 1.8;
+    .kn-doc-miti {
+      text-align: right;
+      padding-right: 6%;
       font-size: 15px;
-      text-align: justify;
-      border-radius: 0 6px 6px 0;
+      font-weight: 600;
+      margin-bottom: 4px;
     }
 
-    /* ─── Single-page print (same look as पूर्वावलोकन, fit to one A4) ─────── */
+    .kn-paper-box {
+      border: 1.5px solid #0a0a0a;
+    }
+
+    .kn-prow {
+      font-size: 15.5px;
+      font-weight: 600;
+      padding: 9px 14px;
+      line-height: 1.5;
+    }
+
+    .kn-prow span {
+      font-weight: 500;
+    }
+
+    .kn-prow.bdr {
+      border-bottom: 1.5px solid #0a0a0a;
+    }
+
+    .kn-para {
+      padding: 6px 24px 10px;
+      font-size: 15.5px;
+      line-height: 1.9;
+      text-align: justify;
+      text-indent: 4em;
+      min-height: 110px;
+    }
+
+    .kn-gap-top {
+      margin-top: 56px;
+    }
+
+    .kn-box-pad-bottom {
+      padding-bottom: 26px;
+    }
+
+    /* ─── Single-page print (exact replica of the paper form, fit to A4) ── */
     @media print {
       @page {
         size: A4;
-        margin: 8mm 12mm;
+        margin: 14mm 14mm 12mm;
       }
 
       html,
@@ -431,10 +440,10 @@
       }
 
       .kn-doc {
-        border: 1.5px solid #0a0a0a;
+        border: none;
         box-shadow: none;
         border-radius: 0;
-        padding: 8mm 8mm;
+        padding: 0;
         margin: 0;
         font-family: 'Noto Sans Devanagari', sans-serif;
         max-width: 100%;
@@ -451,61 +460,52 @@
       }
 
       .kn-doc-org {
-        font-size: 17px;
-        margin-bottom: 0;
+        font-size: 23px;
       }
 
       .kn-doc-center {
-        font-size: 13px;
-        margin-top: 2px;
+        font-size: 16px;
       }
 
       .kn-doc-title-wrap {
-        margin: 8px 0;
+        margin: 10px 0 8px;
       }
 
       .kn-doc-title {
-        font-size: 14px;
-        padding-bottom: 2px;
+        font-size: 18px;
       }
 
-      .kn-doc-meta {
-        font-size: 12px;
-        margin-bottom: 8px;
+      .kn-doc-miti {
+        font-size: 15px;
+        padding-right: 6%;
+        margin-bottom: 4px;
       }
 
-      .kn-doc-table {
-        margin-bottom: 8px;
+      .kn-paper-box {
+        border: 1.5px solid #0a0a0a;
       }
 
-      .kn-doc-table td {
-        padding: 4px 6px;
-        font-size: 12px;
+      .kn-prow {
+        font-size: 15px;
+        padding: 9px 14px;
       }
 
-      .kn-pv-para-box {
-        margin: 8px 0;
-        padding: 8px 12px;
-        font-size: 12px;
-        line-height: 1.55;
-        border: 1px solid #94a3b8;
-        border-left: 4px solid #2563eb;
-        background: #f8fafc !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        color-adjust: exact;
-        border-radius: 0 6px 6px 0;
+      .kn-prow.bdr {
+        border-bottom: 1.5px solid #0a0a0a;
       }
 
-      /* signature block — keep on the same page, compact */
-      .kn-doc > div[style*="grid-template-columns:1fr 1fr"] {
-        margin-top: 24px !important;
-        gap: 40px !important;
-        font-size: 12px !important;
+      .kn-para {
+        font-size: 15px;
+        line-height: 1.9;
+        min-height: 130px;
       }
 
-      .kn-doc > div[style*="grid-template-columns:1fr 1fr"] div[style*="margin-top:32px"] {
-        margin-top: 22px !important;
+      .kn-gap-top {
+        margin-top: 70px;
+      }
+
+      .kn-box-pad-bottom {
+        padding-bottom: 34px;
       }
     }
   </style>
@@ -606,8 +606,6 @@
       // ─── Bikram Sambat (BS) auto-date ─────────────────────────────────────────
       // Epoch: BS 2083-01-01 = AD 2026-04-14 (Nepali New Year 2083).
       // Verified anchors: Baisakh 1, 2083 = 14 Apr 2026; Asar 14, 2083 = 28 Jun 2026.
-      // Month-length table chosen so each year boundary lands on the correct
-      // (Apr 13/14) new-year date. Range 2080–2090 BS.
       const BS_MONTHS = {
         2080: [31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30],
         2081: [31, 31, 32, 32, 31, 30, 30, 30, 29, 30, 30, 30],
@@ -625,10 +623,9 @@
       const BS_EPOCH_AD = Date.UTC(2026, 3, 14); // 14 April 2026
       const ONE_DAY = 86400000;
 
-      // Convert a Gregorian (UTC-midnight) timestamp to a BS {y, m, d} (m is 1-based).
       function adToBs(adUtcMs) {
         let diff = Math.round((adUtcMs - BS_EPOCH_AD) / ONE_DAY);
-        let y = BS_EPOCH_YEAR, m = 0, d = 1; // m: 0-based month index
+        let y = BS_EPOCH_YEAR, m = 0, d = 1;
         if (diff >= 0) {
           while (diff > 0) {
             const row = BS_MONTHS[y]; if (!row) break;
@@ -649,15 +646,12 @@
         return { y: y, m: m + 1, d: d };
       }
 
-      // Today's BS date, using local calendar day.
       function bsToday() {
         const now = new Date();
         return adToBs(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
       }
 
       const pad2 = n => String(n).padStart(2, '0');
-
-
 
       // Module-level state — populated by init()
       const KN = { fuse: 'लवनी', type: 'kshamata' };
@@ -777,8 +771,8 @@
             <div class="sk-f">
               <label>सेवा शुल्क</label>
               <select id="kn-shulka">
-                <option value="संकलन गरेको">संकलन गरेको</option>
-                <option value="संकलन नगरेको">संकलन नगरेको</option>
+                <option value="गरेको">गरेको</option>
+                <option value="नगरेको">नगरेको</option>
                 <option value="मिनाहा गरेको">मिनाहा गरेको</option>
               </select>
             </div>
@@ -795,37 +789,27 @@
         <div class="sk-ch"><span class="sk-ch-t">पूर्वावलोकन</span></div>
         <div class="sk-cb">
           <div class="kn-doc" id="kn-printable">
-            <div class="kn-doc-org">नेपाल विद्युत प्राधिकरण</div>
+            <div class="kn-doc-org">नेपाल विधुत प्राधिकरण</div>
             <div class="kn-doc-center">तौलिहवा वितरण केन्द्र</div>
-            <div class="kn-doc-title-wrap"><div class="kn-doc-title">कार्य निर्देशन फाराम</div></div>
+            <div class="kn-doc-title-wrap"><div class="kn-doc-title">कार्य निर्देशन फारम</div></div>
 
-            <div class="kn-doc-meta">
-              <div>श्री <strong id="kn-pv-fuse">—</strong> फ्युज सेवा |</div>
-              <div>मितिः <strong id="kn-pv-miti">—</strong></div>
-            </div>
+            <div class="kn-doc-miti">मितिः <span id="kn-pv-miti"></span></div>
 
-            <table class="kn-doc-table">
-              <tr><td>ग्राहकको नाम</td><td id="kn-pv-naam">—</td></tr>
-              <tr><td>ग्राहक आईडी</td><td id="kn-pv-id">—</td></tr>
-              <tr><td>ठेगाना</td><td id="kn-pv-addr">—</td></tr>
-              <tr><td>मोबाइल नं.</td><td id="kn-pv-mob">—</td></tr>
-              <tr><td>गुनासोको विषय</td><td id="kn-pv-subject">—</td></tr>
-            </table>
+            <div class="kn-paper-box kn-box-pad-bottom">
+              <div class="kn-prow bdr">ग्राहकको नामः- <span id="kn-pv-naam"></span></div>
+              <div class="kn-prow bdr">ग्राहक नं. र आइडीः- <span id="kn-pv-id"></span></div>
+              <div class="kn-prow">ठेगानाः- <span id="kn-pv-addr"></span></div>
+              <div class="kn-prow">मोवाइल नं.:- <span id="kn-pv-mob"></span></div>
+              <div class="kn-prow">कम्पलेन/गुनासोको कारणः- <span id="kn-pv-subject"></span></div>
 
-            <div id="kn-pv-para" class="kn-pv-para-box">—</div>
+              <div class="kn-para" id="kn-pv-para"></div>
 
-            <table class="kn-doc-table">
-              <tr><td>कम्प्लेन मिति / समय</td><td id="kn-pv-comp">—</td></tr>
-              <tr><td>खटाउने व्यक्ति</td><td id="kn-pv-khataune">—</td></tr>
-              <tr><td>खटिने कर्मचारी</td><td id="kn-pv-khatine">—</td></tr>
-              <tr><td>कार्य सम्पन्न मिति</td><td id="kn-pv-done">—</td></tr>
-              <tr><td>सेवा शुल्क</td><td id="kn-pv-shulka">—</td></tr>
-              <tr><td>रसिद नं.</td><td id="kn-pv-rasid">—</td></tr>
-            </table>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px;text-align:center;font-size:14px">
-              <div><div style="border-top:1.5px solid #0a0a0a;padding-top:10px;margin-top:32px;font-weight:700">खटाउने व्यक्तिको</div><div style="font-size:12px;color:#64748b;margin-top:4px">दस्तखत / मिति</div></div>
-              <div><div style="border-top:1.5px solid #0a0a0a;padding-top:10px;margin-top:32px;font-weight:700">खटिने कर्मचारीको</div><div style="font-size:12px;color:#64748b;margin-top:4px">दस्तखत / मिति</div></div>
+              <div class="kn-prow kn-gap-top">कम्पेलेन/गुनासो जानकारी गराएको मिति र समयः- <span id="kn-pv-comp"></span></div>
+              <div class="kn-prow">कर्मचारी खटाउने व्यक्तीको नाम र सहीः- <span id="kn-pv-khataune"></span></div>
+              <div class="kn-prow">खटिने कर्मचारीको नाम र दस्तखतः- <span id="kn-pv-khatine"></span></div>
+              <div class="kn-prow">कार्य सम्पन्न भएको मिति र समयः- <span id="kn-pv-done"></span></div>
+              <div class="kn-prow">सेवा शुल्क जम्मा गरेको अथवा नगरेकोः- <span id="kn-pv-shulka"></span></div>
+              <div class="kn-prow">गरेको भए रसिद नं.:- <span id="kn-pv-rasid"></span></div>
             </div>
           </div>
           <div class="kn-nav">
@@ -895,7 +879,6 @@
 
       // ─── Auto-fill: BS date, receipt no., खटाउने व्यक्ति ───────────────────────
       // रसिद नं. = "183A" + BS year(2-digit) + BS month(2-digit) + BS day(2-digit).
-      // e.g. 2083-03-14 (असार १४) → 183A830314
       function knAutoFill() {
         const t = bsToday();
         const yy = pad2(t.y % 100);
@@ -918,8 +901,6 @@
       }
 
       // ─── Fuse → खटिने कर्मचारी sync ────────────────────────────────────────────
-      // The selected fuse-sewa centre IS the "खटिने कर्मचारी". Auto-fill it unless
-      // the foreman has manually typed a custom value.
       function knSyncKhatine() {
         const el = document.getElementById('kn-khatine');
         if (!el) return;
@@ -1096,18 +1077,12 @@
       }
 
       // ─── mPower parser ─────────────────────────────────────────────────────────
-      // Handles the Consumer Meter Reading Report layout where the headers
-      // (Consumer Name / Consumer ID / Consumer No / Meter No) sit on one line
-      // and the data values follow on the next line(s), tab- or space-separated.
-      // Anchors on the 12-digit Consumer ID; name = everything before it.
       function knParseMpower() {
         const raw = document.getElementById('kn-mp-paste')?.value || '';
         if (!raw.trim()) { knMpStatus('पेस्ट बक्स खाली छ।', 'warn'); return; }
 
         const set = (id, v) => { const e = document.getElementById(id); if (e && v) e.value = v; };
 
-        // Primary: data row matches "NAME 000000014567 006.19.038 METER"
-        // Name = everything before the 12-digit consumer ID.
         const row = raw.match(/(.+?)\s+(\d{12})\s+(\d{3}\.\d{2}\.\d{3})\s+(\S+)/);
         let name = '', cid = '', cno = '';
 
@@ -1116,7 +1091,6 @@
           cid = row[2];
           cno = row[3];
         } else {
-          // Fallback: pull standalone tokens anywhere in the blob
           cid = (raw.match(/\b\d{12}\b/) || [])[0] || '';
           cno = (raw.match(/\b\d{3}\.\d{2}\.\d{3}\b/) || [])[0] || '';
           const m = raw.match(/([A-Z][A-Z\s]+?)\s+\d{12}/);
@@ -1126,30 +1100,29 @@
         if (!name && !cid && !cno) { knMpStatus('ग्राहक विवरण फेला परेन — पेस्ट जाँच्नुहोस्।', 'err'); return; }
 
         set('kn-naam', name);
-        set('kn-id', cid);
-        const addrEl = document.getElementById('kn-addr');
-        if (addrEl && !addrEl.value && cno) addrEl.placeholder = 'ग्राहक नं. ' + cno + ' — ठेगाना भर्नुहोस्';
+        // ग्राहक नं. र आइडी — both go in the ID field when available
+        if (cno && cid) set('kn-id', cno + ' / ' + cid);
+        else set('kn-id', cid || cno);
         knMpStatus('ग्राहक विवरण भरियो ✓', 'ok');
         knPreview();
       }
 
       function knPreview() {
         const v = id => document.getElementById(id)?.value?.trim() || '';
-        const fill = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '—'; };
+        const fill = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || ''; };
         const naam = v('kn-naam') || '…';
-        fill('kn-pv-fuse', KN.fuse);
         fill('kn-pv-miti', v('kn-miti'));
         fill('kn-pv-naam', v('kn-naam'));
         fill('kn-pv-id', v('kn-id'));
         fill('kn-pv-addr', v('kn-addr'));
         fill('kn-pv-mob', v('kn-mob'));
-        fill('kn-pv-subject', WORK_TYPES[KN.type]?.label || '—');
+        fill('kn-pv-subject', WORK_TYPES[KN.type]?.label || '');
         fill('kn-pv-para', buildPara(KN.type, naam, v('kn-cap1'), v('kn-cap2'), v('kn-other-txt')));
         fill('kn-pv-comp', v('kn-comp-miti'));
         fill('kn-pv-khataune', v('kn-khataune') || KHATAUNE_DEFAULT);
         fill('kn-pv-khatine', v('kn-khatine') || (KN.fuse + ' फ्युज सेवा '));
         fill('kn-pv-done', v('kn-done-miti'));
-        fill('kn-pv-shulka', v('kn-shulka') || document.getElementById('kn-shulka')?.options[0]?.value || '—');
+        fill('kn-pv-shulka', v('kn-shulka') || document.getElementById('kn-shulka')?.options[0]?.value || '');
         fill('kn-pv-rasid', v('kn-rasid'));
       }
 
@@ -1176,7 +1149,7 @@
         document.querySelectorAll('.kn-fuse-btn').forEach((b, i) => b.classList.toggle('on', i === 0));
         knType('kshamata');
         knSyncKhatine();
-        knAutoFill();      // re-apply आजको मिति, रसिद नं., खटाउने व्यक्ति
+        knAutoFill();
         knStep(1);
       }
 
