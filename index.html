@@ -412,6 +412,14 @@
       min-height: 110px;
     }
 
+    .kn-bold-name {
+      font-weight: 700 !important;
+    }
+
+    .kn-khataune-row {
+      margin-bottom: 18px;
+    }
+
     .kn-gap-top {
       margin-top: 56px;
     }
@@ -500,6 +508,14 @@
         min-height: 130px;
       }
 
+      .kn-bold-name {
+        font-weight: 700 !important;
+      }
+
+      .kn-khataune-row {
+        margin-bottom: 20px;
+      }
+
       .kn-gap-top {
         margin-top: 70px;
       }
@@ -507,6 +523,7 @@
       .kn-box-pad-bottom {
         padding-bottom: 34px;
       }
+
     }
   </style>
 </head>
@@ -805,13 +822,14 @@
               <div class="kn-para" id="kn-pv-para"></div>
 
               <div class="kn-prow kn-gap-top">कम्पेलेन/गुनासो जानकारी गराएको मिति र समयः- <span id="kn-pv-comp"></span></div>
-              <div class="kn-prow">कर्मचारी खटाउने व्यक्तीको नाम र सहीः- <span id="kn-pv-khataune"></span></div>
+              <div class="kn-prow kn-khataune-row">कर्मचारी खटाउने व्यक्तीको नाम र सहीः- <span id="kn-pv-khataune" class="kn-bold-name"></span></div>
               <div class="kn-prow">खटिने कर्मचारीको नाम र दस्तखतः- <span id="kn-pv-khatine"></span></div>
               <div class="kn-prow">कार्य सम्पन्न भएको मिति र समयः- <span id="kn-pv-done"></span></div>
               <div class="kn-prow">सेवा शुल्क जम्मा गरेको अथवा नगरेकोः- <span id="kn-pv-shulka"></span></div>
               <div class="kn-prow">गरेको भए रसिद नं.:- <span id="kn-pv-rasid"></span></div>
             </div>
           </div>
+
           <div class="kn-nav">
             <button type="button" class="sk-btn sk-bg kn-back" data-to="4">← सच्याउनुहोस्</button>
             <div style="display:flex; gap:8px;">
@@ -937,22 +955,22 @@
         switch (type) {
 
           case 'kshamata':
-            return `निज ग्राहक श्री ${naam} ले यस कार्यालयमा निवेदन पेश गरेको र आवश्यक प्रक्रिया पूरा भएको हुनाले उक्त मिटरको ${cap1 || '...'} बाट ${cap2 || '...'} को MCB Change गरिदिनु हुन अनुरोध छ ।`;
+            return `निज ग्राहकले यस कार्यालयमा निवेदन पेश गरेको र आवश्यक प्रक्रिया पूरा भएको हुनाले उक्त मिटरको ${cap1 || '...'} बाट ${cap2 || '...'} को MCB Change गरिदिनु हुन अनुरोध छ ।`;
 
           case 'burn':
-            return `निज ग्राहक श्री ${naam} ले मिटर जलेको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
+            return `निज ग्राहकले मिटर जलेको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
 
           case 'display':
-            return `निज ग्राहक श्री ${naam} ले मिटरको डिस्प्ले आउट भएको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
+            return `निज ग्राहकले मिटरको डिस्प्ले आउट भएको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
 
           case 'banda':
-            return `निज ग्राहक श्री ${naam} ले मिटर बन्द भएको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
+            return `निज ग्राहकले मिटर बन्द भएको भनी यस कार्यालयमा निवेदन पेश गरेको हुनाले उक्त मिटर खोली कार्यालय पठाइदिनु हुन अनुरोध छ ।`;
 
           case 'thaupari':
-            return `निज ग्राहक श्री ${naam} को मिटर ठाउँसारी सम्बन्धी सम्पूर्ण प्रक्रिया पूरा भएको हुनाले उक्त मिटर ठाउँसारी गरिदिनु हुन अनुरोध छ ।`;
+            return `निज ग्राहकको मिटर ठाउँसारी सम्बन्धी सम्पूर्ण प्रक्रिया पूरा भएको हुनाले उक्त मिटर ठाउँसारी गरिदिनु हुन अनुरोध छ ।`;
 
           default:
-            return other || `निज ग्राहक श्री ${naam} सम्बन्धी आवश्यक कार्य गरिदिनु हुन अनुरोध छ ।`;
+            return other || `निज ग्राहक सम्बन्धी आवश्यक कार्य गरिदिनु हुन अनुरोध छ ।`;
         }
       }
 
@@ -989,11 +1007,13 @@
           placeSel.disabled = true;
           if (muni && MUNI_DATA[muni]) {
             wardSel.disabled = false;
-            Object.keys(MUNI_DATA[muni]).sort((a, b) => +a - +b).forEach(w => {
+            const wardNums = Object.keys(MUNI_DATA[muni]).map(Number);
+            const maxWard = Math.max.apply(null, wardNums);
+            for (let w = 1; w <= maxWard; w++) {
               const opt = document.createElement('option');
               opt.value = w; opt.textContent = 'वडा नं. ' + w;
               wardSel.appendChild(opt);
-            });
+            }
           } else { wardSel.disabled = true; }
           knHideCustom();
           knUpdateAddrPreview();
@@ -1005,9 +1025,10 @@
           Object.assign(knAddrState, { ward, place: '', custom: '', isCustom: false });
           const placeSel = document.getElementById('kn-addr-place');
           placeSel.innerHTML = '<option value="">— टोल —</option>';
-          if (muni && ward && MUNI_DATA[muni] && MUNI_DATA[muni][ward]) {
+          if (muni && ward) {
             placeSel.disabled = false;
-            MUNI_DATA[muni][ward].forEach(pl => {
+            const toles = (MUNI_DATA[muni] && MUNI_DATA[muni][ward]) || [];
+            toles.forEach(pl => {
               const opt = document.createElement('option');
               opt.value = pl; opt.textContent = pl;
               placeSel.appendChild(opt);
@@ -1124,6 +1145,7 @@
         fill('kn-pv-done', v('kn-done-miti'));
         fill('kn-pv-shulka', v('kn-shulka') || document.getElementById('kn-shulka')?.options[0]?.value || '');
         fill('kn-pv-rasid', v('kn-rasid'));
+
       }
 
       // ─── Print ────────────────────────────────────────────────────────────────
